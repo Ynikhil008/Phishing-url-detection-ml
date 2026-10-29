@@ -1,0 +1,25 @@
+# requirements.txt
+pandas
+numpy
+scikit-learn
+imbalanced-learn
+torch
+transformers
+tldextract
+requests
+whois
+fastapi
+uvicorn
+streamlit
+matplotlib
+seaborn
+playwright
+Pillow
+tqdm
+joblib
+python-whois
+dnspython
+xgboost
+shap
+optuna
+

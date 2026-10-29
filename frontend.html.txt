@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Phishing Detection System</title>
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        color: white;
+        text-align: center;
+        padding: 50px;
+    }
+
+    .container {
+        background: white;
+        color: black;
+        padding: 30px;
+        border-radius: 12px;
+        width: 400px;
+        margin: auto;
+        box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        padding: 10px 20px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #5a67d8;
+    }
+
+    #result {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    .phishing {
+        color: red;
+    }
+
+    .legit {
+        color: green;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>🔐 Phishing URL Detector</h2>
+
+<input type="text" id="urlInput" placeholder="Enter URL here">
+
+<br>
+
+<button onclick="checkURL()">Check URL</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+async function checkURL() {
+    const url = document.getElementById("urlInput").value;
+
+    if (!url) {
+        alert("Please enter a URL");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/predict/url", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ url: url })
+        });
+
+        const data = await response.json();
+
+        let resultHTML = `
+            Prediction: <span class="${data.prediction === 'PHISHING' ? 'phishing' : 'legit'}">${data.prediction}</span><br>
+            Confidence: ${data.confidence}<br>
+            Risk Level: ${data.risk_level}<br>
+        `;
+
+        if (data.suspicious_signals && data.suspicious_signals.length > 0) {
+            resultHTML += "<br>⚠️ Signals:<ul>";
+            data.suspicious_signals.forEach(signal => {
+                resultHTML += `<li>${signal}</li>`;
+            });
+            resultHTML += "</ul>";
+        }
+
+        document.getElementById("result").innerHTML = resultHTML;
+
+    } catch (error) {
+        document.getElementById("result").innerHTML = "❌ Error connecting to backend";
+    }
+}
+</script>
+
+</body>
+</html>
