@@ -28,7 +28,7 @@ def main():
         uvicorn.run("src.api:app", host="0.0.0.0", port=8000, reload=True)
 
     elif args.mode == 'ui':
-        os.system("streamlit run streamlit_app.py")
+        os.system("streamlit run api1.py")
 
     elif args.mode == 'demo':
         # Quick demo: analyze a few URLs
